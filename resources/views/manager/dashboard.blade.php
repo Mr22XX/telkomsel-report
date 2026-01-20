@@ -7,7 +7,7 @@
     <div class="bg-white rounded-xl shadow p-6 mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
             <h1 class="text-2xl font-bold text-red-600">
-                Dashboard
+                Dashboard Manager
             </h1>
             <p class="text-sm text-gray-600">
                 Selamat datang, {{ Auth::user()->name }}

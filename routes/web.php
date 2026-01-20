@@ -7,9 +7,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/dashboard/sales', function () {
+        return view('sales.dashboard');
+    })->name('sales.dashboard');
+
+    Route::get('/dashboard/manager', function () {
+        return view('manager.dashboard');
+    })->name('manager.dashboard');
+
+});
+
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

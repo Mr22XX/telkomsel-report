@@ -6,7 +6,7 @@
 
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
 
-        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">
+        <h2 class="text-2xl font-bold text-black text-center mb-6">
             Login
         </h2>
 
