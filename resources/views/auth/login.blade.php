@@ -19,6 +19,13 @@
                        class="w-full mt-1 border rounded-lg px-4 py-2 focus:ring-red-500 focus:border-red-500">
             </div>
 
+            @if ($errors->any())
+                <div class="mb-4 rounded-lg  text-sm text-red-700">
+                    Email atau Password yang dimasukkan salah
+                </div>
+            @endif
+
+
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">
                 Password

@@ -28,6 +28,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if (! Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            throw ValidationException::withMessages([
+                'email' => __('Email atau password salah.'),
+            ]);
+        }
+
+
         if (auth()->user()->isManager()) {
             return redirect()->route('manager.dashboard');
         }
