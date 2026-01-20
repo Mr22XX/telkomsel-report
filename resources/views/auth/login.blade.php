@@ -31,6 +31,7 @@
                 Password
             </label>
 
+
             <div class="relative">
                 <input id="password" type="password" name="password" placeholder="Password"
                     class="w-full rounded-lg border-gray-300 pr-12 focus:border-red-500 focus:ring-red-500"
@@ -42,6 +43,11 @@
                     <i class="fa-solid fa-eye"></i>
                 </button>
             </div>
+            <p class="mt-3">
+                <a href="{{ route('password.request') }}" class="text-black text-sm ">
+                    Lupa Password ?
+                    </a>
+            </p>
 
             @error('password')
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
