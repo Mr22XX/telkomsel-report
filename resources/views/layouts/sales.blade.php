@@ -28,7 +28,6 @@
 
     <!-- SIDEBAR -->
     <aside id="sidebar"
-        class="fixed lg:static inset-y-0 left-0 w-64 bg-gradient-to-br from-red-700 via-red-600 to-orange-400 text-white transform -translate-x-full lg:translate-x-0 transition duration-300 z-50 <aside id="sidebar"
     class="fixed lg:static inset-y-0 left-0 w-64
     bg-gradient-to-br from-red-700 via-red-600 to-orange-400
     text-white transform -translate-x-full lg:translate-x-0
@@ -61,6 +60,12 @@
         
         </nav>
     </div>
+
+    
+    <div class="absolute bottom-20 text-center items-center flex justify-center w-full font-extralight">
+        <p id="cp"></p>
+    </div>
+
     <!-- LOGOUT -->
 <div class="p-4 border-t border-red-500">
     <form method="POST" action="{{ route('logout') }}">
@@ -83,16 +88,12 @@
     <div class="flex-1 flex flex-col min-h-screen ">
 
         <!-- TOPBAR -->
-        <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
+        <header class="bg-white shadow-sm px-6 py-4 flex items-center ">
             <button id="toggleSidebar" class="lg:hidden text-red-600 text-xl">
                 <i class="fas fa-bars"></i>
             </button>
 
-            <div class="font-semibold text-gray-700">
-                @yield('page-title', 'Dashboard')
-            </div>
-
-            <div class="text-sm text-gray-500">
+            <div class="text-sm text-gray-500 text-end w-full">
                 {{ auth()->user()->name }}
             </div>
         </header>
@@ -131,6 +132,17 @@
     });
 </script>
 
+    <script>
+        const year = new Date()
+        let years = year.getFullYear()
+    
+        const cp = document.getElementById('cp')
+    
+        cp.innerHTML = `&copy; ${years} All Right Reserved`
+    </script>
+
 @stack('scripts')
+
+
 </body>
 </html>
