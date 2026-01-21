@@ -93,9 +93,11 @@
                 <i class="fas fa-bars"></i>
             </button>
 
-            <div class="text-sm text-gray-500 text-end w-full">
+            <div class="text-sm text-gray-500 w-full flex gap-3 justify-end">
                 {{ auth()->user()->name }}
+                {{-- <p id="clock"></p> --}}
             </div>
+
         </header>
 
         <!-- PAGE CONTENT -->
@@ -133,13 +135,38 @@
 </script>
 
     <script>
-        const year = new Date()
-        let years = year.getFullYear()
+        const today = new Date()
+        let years = today.getFullYear()
     
         const cp = document.getElementById('cp')
     
         cp.innerHTML = `&copy; ${years} All Right Reserved`
+
+        // function startTime(){
+
+            
+        //     let h = today.getHours()
+        //     let m = today.getMinutes()
+        //     let s = today.getSeconds()
+            
+        //     m = checkTime(m)
+        //     s = checkTime(s)
+            
+        //     document.getElementById('clock').innerHTML = h + ":" + m + ":" + s
+            
+        //     setTimeout(startTime, 1000)
+        // }
+
+        // function checkTime(i) {
+        //     if (i < 10) {
+        //         i = "0" + i;
+        //     }
+        //     return i;
+        // }
+
     </script>
+
+
 
 @stack('scripts')
 
