@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Report;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class SalesDashboardController extends Controller
+{
+    public function index()
+{
+    $userId = Auth::id();
+    $today = Carbon::today();
+
+    $todayReport = Report::where('user_id', $userId)
+        ->whereDate('tanggal', $today)
+        ->first();
+
+    return view('sales.dashboard', [
+        'totalReport' => Report::where('user_id', $userId)->count(),
+        'totalSellingToday' => $todayReport
+            ? $todayReport->totalSelling()
+            : 0,
+
+        // DATA CHART
+        'chartData' => [
+            'perdana' => $todayReport->perdana ?? 0,
+            'byu' => $todayReport->byu ?? 0,
+            'lite' => $todayReport->lite ?? 0,
+            'orbit' => $todayReport->orbit ?? 0,
+            'cvm_byu' => $todayReport->cvm_byu ?? 0,
+            'super_seru' => $todayReport->super_seru ?? 0,
+            'digital' => $todayReport->digital ?? 0,
+            'roaming' => $todayReport->roaming ?? 0,
+            'vf_hp' => $todayReport->vf_hp ?? 0,
+            'vf_lite_byu' => $todayReport->vf_lite_byu ?? 0,
+            'lite_vf' => $todayReport->lite_vf ?? 0,
+            'byu_vf' => $todayReport->byu_vf ?? 0,
+            'my_telkomsel' => $todayReport->my_telkomsel ?? 0,
+        ]
+    ]);
+}
+}

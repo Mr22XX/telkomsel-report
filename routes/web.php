@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,15 +9,22 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard/sales', function () {
-        return view('sales.dashboard');
-    })->name('sales.dashboard');
 
     Route::get('/dashboard/manager', function () {
         return view('manager.dashboard');
     })->name('manager.dashboard');
-
 });
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/sales/dashboard', function () {
+        return app(\App\Http\Controllers\SalesDashboardController::class)->index();
+    })->name('sales.dashboard');
+
+    Route::resource('reports', ReportController::class);
+});
+
+
 
 
 // Route::middleware('auth')->group(function () {

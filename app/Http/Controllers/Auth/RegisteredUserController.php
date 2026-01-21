@@ -46,6 +46,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        if (auth()->user()->isManager()) {
+            return redirect()->route('manager.dashboard');
+        }
+            return redirect()->route('sales.dashboard');
     }
 }

@@ -1,44 +1,92 @@
-@extends('layouts.main')
+@extends('layouts.sales')
+
+@section('title', 'Dashboard Sales')
+@section('page-title', 'Dashboard')
 
 @section('content')
-<div class="min-h-screen p-6">
 
-    <!-- HEADER -->
-    <div class="bg-white rounded-xl shadow p-6 mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-red-600">
-                Dashboard Sales
-            </h1>
-            <p class="text-sm text-gray-600">
-                Selamat datang, {{ Auth::user()->name }}
-            </p>
-        </div>
+<!-- SUMMARY -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button class="mt-4 md:mt-0 bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700">
-                Logout
-            </button>
-        </form>
+    <div class="bg-white rounded-xl shadow p-6">
+        <p class="text-gray-500 text-sm">Total Report</p>
+        <p class="text-3xl font-bold text-red-600">
+            {{ $totalReport }}
+        </p>
     </div>
 
-    <!-- SUMMARY -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Total Report</p>
-            <h2 class="text-3xl font-bold text-red-600">12</h2>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Penjualan Hari Ini</p>
-            <h2 class="text-3xl font-bold text-red-600">Rp 3.500.000</h2>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Sales Aktif</p>
-            <h2 class="text-3xl font-bold text-red-600">45</h2>
-        </div>
+    <div class="bg-white rounded-xl shadow p-6">
+        <p class="text-gray-500 text-sm">Total Penjualan Hari Ini</p>
+        <p class="text-3xl font-bold text-red-600">
+            {{ $totalSellingToday }}
+        </p>
     </div>
 
 </div>
+
+<!-- CHART -->
+<div class="bg-white rounded-xl shadow p-6">
+    <h2 class="font-semibold text-gray-700 mb-4">
+        Penjualan Hari Ini
+    </h2>
+
+    <div class="relative h-[260px] sm:h-[300px] md:h-[260px] lg:h-[300px]">
+    <canvas id="salesChart"></canvas>
+    </div>
+
+</div>
+
 @endsection
+
+@push('scripts')
+<script>
+const ctx = document.getElementById('salesChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Perdana', 'ByU', 'Lite', 'Orbit', 'cvm_byu', 'superseru' , 'roaming',  'Digital', 'mytelkomsel'],
+        datasets: [{
+            label: 'Jumlah Penjualan',
+            data: [
+                {{ $chartData['perdana'] }},
+                {{ $chartData['byu'] }},
+                {{ $chartData['lite'] }},
+                {{ $chartData['orbit'] }},
+                {{ $chartData['cvm_byu'] }},
+                {{ $chartData['super_seru'] }},
+                {{ $chartData['roaming'] }},
+                {{ $chartData['digital'] }},
+                {{ $chartData['my_telkomsel'] }}
+            ],
+            backgroundColor: [
+                '#dc2626',
+                '#ef4444',
+                '#f87171',
+                '#fb7185',
+                '#fdba74'
+            ],
+            borderRadius: 6,
+            barThickness: 'flex',
+            maxBarThickness: 40
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    precision: 0
+                }
+            }
+        }
+    }
+});
+</script>
+@endpush
+

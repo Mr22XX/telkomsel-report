@@ -10,20 +10,21 @@
         
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus  />
+            <h1 class="text-white mb-16 text-center text-xl font-semibold">Reset Password</h1>
+            <x-input-label class="text-white" for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full border border-black" type="email" placeholder="Masukkan email disini" name="email" :value="old('email')" required autofocus  />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
             
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center flex-col justify-end mt-4">
+                <div class="mb-4 text-sm text-white w-full text-center">
+                    {{ __('Masukkan Email terdaftar anda agar dikirimkan link reset password.') }}
+                </div>
                 <x-primary-button>
                     {{ __('Email Password Reset Link') }}
                 </x-primary-button>
             </div>
         </form>
-        <div class="mb-4 text-sm text-white w-[30%] text-center">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-        </div>
 </div>
 
 
