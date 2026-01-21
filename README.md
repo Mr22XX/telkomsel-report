@@ -1,8 +1,8 @@
-<h1>Telkomsel Selling Report APP</h1>
+<h1>Telkomsel Sales Reporting System</h1>
 
 
 ## About TSR
-Telkomsel Selling Report (TSR) App adalah website PWA Progressive Web App yang digunakan untuk memonitoring laporan penjualan dari banyak sales.
+Telkomsel Sales Reporting System (TSR) adalah website PWA Progressive Web App yang digunakan untuk memonitoring laporan penjualan dari banyak sales.
 
 ### Tech & Tool
 - Laravel
