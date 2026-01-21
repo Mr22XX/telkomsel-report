@@ -38,7 +38,7 @@
         <!-- LOGO -->
         <div class="p-6 font-bold text-xl tracking-wide border-b border-red-500">
             TSR
-            <p class="text-sm font-extralight">Telkomsel Selling Report</p>
+            <p class="text-sm font-extralight">Telkomsel Sales Reporting</p>
         </div>
         
         <!-- MENU -->
