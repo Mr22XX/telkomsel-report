@@ -88,7 +88,7 @@
     <div class="flex-1 flex flex-col min-h-screen ">
 
         <!-- TOPBAR -->
-        <header class="bg-white shadow-sm px-6 py-4 flex items-center ">
+        <header class="bg-white shadow-sm px-6 py-4 flex items-center">
             <button id="toggleSidebar" class="lg:hidden text-red-600 text-xl">
                 <i class="fas fa-bars"></i>
             </button>

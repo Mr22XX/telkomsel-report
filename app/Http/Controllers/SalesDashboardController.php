@@ -15,14 +15,45 @@ class SalesDashboardController extends Controller
     $today = Carbon::today();
 
     $todayReport = Report::where('user_id', $userId)
-        ->whereDate('tanggal', $today)
+        // ->whereDate('tanggal', $today)
         ->first();
+
+        $year = now()->year;
+
+        $monthlyData = DB::table('reports')
+            ->selectRaw('
+                MONTH(tanggal) as month,
+                SUM(
+                    perdana + byu + lite + orbit + cvm_byu + super_seru +
+                    digital + roaming + vf_hp + vf_lite_byu +
+                    lite_vf + byu_vf + my_telkomsel
+                ) as total 
+            ')
+            ->whereYear('tanggal', $year)
+            ->where('user_id', $userId)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // FIX biar Januari–Desember selalu ada
+        $monthlyLabels = [];
+        $monthlyTotals = [];
+
+        for ($m = 1; $m <= 12; $m++) {
+            $monthlyLabels[] = Carbon::create()->month($m)->format('M');
+            $found = $monthlyData->firstWhere('month', $m);
+            $monthlyTotals[] = $found ? $found->total : 0;
+        }
+
+
 
     return view('sales.dashboard', [
         'totalReport' => Report::where('user_id', $userId)->count(),
         'totalSellingToday' => $todayReport
             ? $todayReport->totalSelling()
             : 0,
+        'monthlyLabels' => $monthlyLabels,
+        'monthlyTotals'=> $monthlyTotals,
 
         // DATA CHART
         'chartData' => [
