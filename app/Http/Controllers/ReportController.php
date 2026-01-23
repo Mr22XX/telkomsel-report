@@ -39,6 +39,21 @@ class ReportController extends Controller
             'fokus_1' => 'nullable|string',
             'fokus_2' => 'nullable|string',
             'fokus_3' => 'nullable|string',
+
+            'perdana' => 'nullable|integer|min:0',
+            'byu' => 'nullable|integer|min:0',
+            'lite' => 'nullable|integer|min:0',
+            'orbit' => 'nullable|integer|min:0',
+
+            'cvm_byu' => 'nullable|numeric|min:0',
+            'super_seru' => 'nullable|numeric|min:0',
+            'digital' => 'nullable|numeric|min:0',
+            'roaming' => 'nullable|numeric|min:0',
+            'vf_hp' => 'nullable|numeric|min:0',
+            'vf_lite_byu' => 'nullable|numeric|min:0',
+            'lite_vf' => 'nullable|numeric|min:0',
+            'byu_vf' => 'nullable|numeric|min:0',
+            'my_telkomsel' => 'nullable|numeric|min:0',
         ]);
 
         Report::create([

@@ -3,10 +3,13 @@
 @section('content')
 <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 relative">
     <div class="flex flex-col justify-center px-10 lg:px-20 text-white">
-        <img class="absolute top-2 left-3 lg:w-[50px] lg:h-[70px] h-[40px] sm:my-5 sm:mx-5" src="/icon.png"  alt="">
-        <h1 class="text-4xl lg:text-5xl font-bold leading-tight mt-3">
+         <div class="absolute flex gap-1 items-center top-1 left-3">
+            <img class=" bg-white rounded-full" src="/icon.png" width="40" height="40" alt="" >
+            <h1 class="text-2xl font-bold text-slate-950">TSR</h1>
+        </div>
+        <h1 class="text-4xl lg:text-5xl font-bold leading-tight pt-7">
             Telkomsel<br>
-            Sales Reporting System
+            Sales Reporting System Bengkulu
         </h1>
 
         <p class="mt-6 text-lg text-red-100 max-w-md">
@@ -24,7 +27,7 @@
             </h2>
 
             <p class="text-sm text-gray-500 mb-8">
-                Gunakan akun internal Telkomsel
+                Gunakan akun internal TSR Bengkulu
             </p>
 
             <div class="space-y-4">

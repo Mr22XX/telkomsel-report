@@ -18,6 +18,26 @@ class SalesDashboardController extends Controller
         // ->whereDate('tanggal', $today)
         ->first();
 
+    $todayQty = $todayReport
+    ? ($todayReport->perdana
+     + $todayReport->byu
+     + $todayReport->lite
+     + $todayReport->orbit)
+    : 0;
+
+    $todayRevenue = $todayReport
+    ? ($todayReport->cvm_byu
+     + $todayReport->super_seru
+     + $todayReport->digital
+     + $todayReport->roaming
+     + $todayReport->vf_hp
+     + $todayReport->vf_lite_byu
+     + $todayReport->lite_vf
+     + $todayReport->byu_vf
+     + $todayReport->my_telkomsel)
+    : 0;
+
+
         $year = now()->year;
 
         $monthlyData = DB::table('reports')
@@ -50,10 +70,13 @@ class SalesDashboardController extends Controller
     return view('sales.dashboard', [
         'totalReport' => Report::where('user_id', $userId)->count(),
         'totalSellingToday' => $todayReport
-            ? $todayReport->totalSelling()
+            ? $todayReport -> totalSelling()
             : 0,
         'monthlyLabels' => $monthlyLabels,
         'monthlyTotals'=> $monthlyTotals,
+        'totalQty' => $todayReport ? $todayReport->totalQty() : 0,
+        'totalRevenue' => $todayReport ? $todayReport->totalRevenue() : 0,
+
 
         // DATA CHART
         'chartData' => [

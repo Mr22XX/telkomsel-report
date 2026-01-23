@@ -38,7 +38,6 @@ class Report extends Model
         return $this->belongsTo(User::class);
     }
 
-    // HELPER: total penjualan
     public function totalSelling()
     {
         return
@@ -56,4 +55,35 @@ class Report extends Model
             $this->byu_vf + 
             $this->my_telkomsel ;
     }
+
+    
+    // =========================
+    // TOTAL QTY (UNIT)
+    // =========================
+    public function totalQty()
+    {
+        return ($this->perdana ?? 0)
+             + ($this->byu ?? 0)
+             + ($this->lite ?? 0)
+             + ($this->orbit ?? 0);
+    }
+
+    // =========================
+    // TOTAL REVENUE (RUPIAH)
+    // =========================
+    public function totalRevenue()
+    {
+        return ($this->cvm_byu ?? 0)
+             + ($this->super_seru ?? 0)
+             + ($this->digital ?? 0)
+             + ($this->roaming ?? 0)
+             + ($this->vf_hp ?? 0)
+             + ($this->vf_lite_byu ?? 0)
+             + ($this->lite_vf ?? 0)
+             + ($this->byu_vf ?? 0)
+             + ($this->my_telkomsel ?? 0);
+    }
 }
+
+
+

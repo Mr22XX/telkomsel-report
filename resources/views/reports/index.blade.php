@@ -109,6 +109,7 @@ table.dataTable tbody td {
                     <th>Tanggal</th>
                     <th>TAP</th>
                     <th>Fokus Selling</th>
+                    <th>Quantity</th>
                     <th>Total Penjualan</th>
                     <th>Aksi</th>
                 </tr>
@@ -135,14 +136,39 @@ table.dataTable tbody td {
                             </li>
                         </ol>
                     </td>
-                    <td class="font-semibold">
+                    <td class="font-semibold"
+                        data-export="
+                        Perdana: {{ $r->perdana }}
+                        Byu: {{ $r->byu }}
+                        Lite: {{ $r->lite }}
+                        Orbit: {{ $r->orbit }}">
                         <button
                             class="underline text-red-600"
-                            onclick="openDetailModal({
+                            onclick="openDetailModal1({
                                 perdana: '{{ $r->perdana }}',
                                 byu: '{{ $r->byu }}',
                                 lite: '{{ $r->lite }}',
                                 orbit: '{{ $r->orbit }}',
+                            })">
+
+                            {{ $r->totalQty() }}
+                        </button>
+                    </td>
+                    <td class="font-semibold"
+                    data-export="
+                    CVM ByU: Rp {{ number_format($r->cvm_byu,0,',','.') }}
+                    Super Seru: Rp {{ number_format($r->super_seru,0,',','.') }}
+                    Digital: Rp {{ number_format($r->digital,0,',','.') }}
+                    Roaming: Rp {{ number_format($r->roaming,0,',','.') }}
+                    VF HP: Rp {{ number_format($r->vf_hp,0,',','.') }}
+                    VF Lite ByU: Rp {{ number_format($r->vf_lite_byu,0,',','.') }}
+                    Lite VF: Rp {{ number_format($r->lite_vf,0,',','.') }}
+                    ByU VF: Rp {{ number_format($r->byu_vf,0,',','.') }}
+                    MyTelkomsel: Rp {{ number_format($r->my_telkomsel,0,',','.') }}
+                    ">
+                        <button
+                            class="underline text-red-600"
+                            onclick="openDetailModal2({
                                 cvm_byu: '{{ $r->cvm_byu }}',
                                 super_seru: '{{ $r->super_seru }}',
                                 digital: '{{ $r->digital }}',
@@ -153,7 +179,7 @@ table.dataTable tbody td {
                                 byu_vf: '{{ $r->byu_vf }}',
                                 mytelkomsel: '{{ $r->my_telkomsel }}',
                             })">
-                            {{ $r->totalSelling() }}
+                            Rp {{ number_format($r->totalRevenue(), 0, ',', '.') }}
                         </button>
                     </td>
                     <td class="space-x-3 whitespace-nowrap">
@@ -183,13 +209,13 @@ table.dataTable tbody td {
 
 
 <!-- MODAL DETAIL PENJUALAN -->
-<div id="detailModal"
+<div id="detailModal1"
     class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
 
     <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-4 p-6">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold text-gray-700">
-                Detail Penjualan
+                Detail Quantity
             </h2>
             <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600">
                 ✕
@@ -213,6 +239,32 @@ table.dataTable tbody td {
                 <span>Orbit</span>
                 <span id="detailOrbit" class="font-semibold"></span>
             </li>
+        </ul>
+
+        <div class="mt-6 text-right">
+            <button onclick="closeDetailModal1()"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETAIL PENJUALAN -->
+<div id="detailModal2"
+    class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-4 p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-700">
+                Detail Penjualan
+            </h2>
+            <button onclick="closeDetailModal2()" class="text-gray-400 hover:text-gray-600">
+                ✕
+            </button>
+        </div>
+
+        <ul class="space-y-2 text-sm">
             <li class="flex justify-between">
                 <span>Cvm Byu</span>
                 <span id="detailCvmByu" class="font-semibold"></span>
@@ -252,14 +304,13 @@ table.dataTable tbody td {
         </ul>
 
         <div class="mt-6 text-right">
-            <button onclick="closeDetailModal()"
+            <button onclick="closeDetailModal2()"
                 class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm">
                 Tutup
             </button>
         </div>
     </div>
 </div>
-
 
 @endsection
 
@@ -299,21 +350,52 @@ $(document).ready(function () {
             {
                 extend: 'excelHtml5',
                 title: 'Report Penjualan',
-                exportOptions: { columns: [0,1,2,3] }
+                exportOptions: {
+                    columns: [0,1,2,3,4],
+                    format: {
+                        body: function (data, row, column, node) {
+                            if (column === 3 || column === 4) {
+                                return $(node).attr('data-export') ?? data;
+                            }
+                            return data;
+                        }
+                    }
+                }
             },
             {
                 extend: 'pdfHtml5',
                 title: 'Report Penjualan',
                 orientation: 'landscape',
                 pageSize: 'A4',
-                exportOptions: { columns: [0,1,2,3] }
+                exportOptions: {
+                    columns: [0,1,2,3,4],
+                    format: {
+                        body: function (data, row, column, node) {
+                            if (column === 3 || column === 4) {
+                                return $(node).attr('data-export') ?? data;
+                            }
+                            return data;
+                        }
+                    }
+                }
             },
             {
                 extend: 'print',
                 title: 'Report Penjualan',
-                exportOptions: { columns: [0,1,2,3] }
+                exportOptions: {
+                    columns: [0,1,2,3,4],
+                    format: {
+                        body: function (data, row, column, node) {
+                            if (column === 3 || column === 4) {
+                                return $(node).attr('data-export') ?? data;
+                            }
+                            return data;
+                        }
+                    }
+                }
             }
         ],
+
         language: {
             search: "Cari:",
             lengthMenu: "Tampilkan _MENU_ data",
@@ -341,28 +423,56 @@ $(document).ready(function () {
 </script>
 
 <script>
-function openDetailModal(data) {
+function openDetailModal1(data) {
     document.getElementById('detailPerdana').innerText = data.perdana;
     document.getElementById('detailByu').innerText = data.byu;
     document.getElementById('detailLite').innerText = data.lite;
     document.getElementById('detailOrbit').innerText = data.orbit;
-    document.getElementById('detailCvmByu').innerText = data.cvm_byu;
-    document.getElementById('detailSuper').innerText = data.super_seru;
-    document.getElementById('detailDigital').innerText = data.digital;
-    document.getElementById('detailRoaming').innerText = data.roaming;
-    document.getElementById('detailVfhp').innerText = data.vf_hp;
-    document.getElementById('detailVflitebyu').innerText = data.vf_lite_byu;
-    document.getElementById('detailLitevf').innerText = data.lite_vf;
-    document.getElementById('detailByuvf').innerText = data.byu_vf;
-    document.getElementById('detailMytelkomsel').innerText = data.mytelkomsel;
+    // document.getElementById('detailCvmByu').innerText = data.cvm_byu;
+    // document.getElementById('detailSuper').innerText = data.super_seru;
+    // document.getElementById('detailDigital').innerText = data.digital;
+    // document.getElementById('detailRoaming').innerText = data.roaming;
+    // document.getElementById('detailVfhp').innerText = data.vf_hp;
+    // document.getElementById('detailVflitebyu').innerText = data.vf_lite_byu;
+    // document.getElementById('detailLitevf').innerText = data.lite_vf;
+    // document.getElementById('detailByuvf').innerText = data.byu_vf;
+    // document.getElementById('detailMytelkomsel').innerText = data.mytelkomsel;
 
-    const modal = document.getElementById('detailModal');
+    const modal = document.getElementById('detailModal1');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 }
 
-function closeDetailModal() {
-    const modal = document.getElementById('detailModal');
+function closeDetailModal1() {
+    const modal = document.getElementById('detailModal1');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+function openDetailModal2(data) {
+   const rupiah = (angka) =>
+        new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        }).format(angka);
+
+    document.getElementById('detailCvmByu').innerText = rupiah(data.cvm_byu);
+    document.getElementById('detailSuper').innerText = rupiah(data.super_seru);
+    document.getElementById('detailDigital').innerText = rupiah(data.digital);
+    document.getElementById('detailRoaming').innerText = rupiah(data.roaming);
+    document.getElementById('detailVfhp').innerText = rupiah(data.vf_hp);
+    document.getElementById('detailVflitebyu').innerText = rupiah(data.vf_lite_byu);
+    document.getElementById('detailLitevf').innerText = rupiah(data.lite_vf);
+    document.getElementById('detailByuvf').innerText = rupiah(data.byu_vf);
+    document.getElementById('detailMytelkomsel').innerText = rupiah(data.mytelkomsel);
+
+
+    const modal = document.getElementById('detailModal2');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeDetailModal2() {
+    const modal = document.getElementById('detailModal2');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
 }

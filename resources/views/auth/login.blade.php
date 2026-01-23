@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center px-4 relative">
-    <img class="absolute top-2 left-3" src="/icon.png" width="50" height="50" alt="">
+    <div class="absolute flex gap-1 items-center top-2 left-3">
+        <img class=" bg-white rounded-full" src="/icon.png" width="40" height="40" alt="" >
+        <h1 class="text-2xl font-bold text-slate-950">TSR</h1>
+    </div>
 
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
 
