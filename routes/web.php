@@ -24,6 +24,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('reports', ReportController::class);
 });
 
+Route::view('/offline', 'offline');
+
+
 
 
 

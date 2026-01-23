@@ -1,39 +1,89 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@extends('layouts.main')
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+@section('content')
+<div class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+    <img class="absolute top-2 left-3" src="/icon.png" width="50" height="50" alt="">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        
+        <!-- Title -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">
+                Reset Password
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                Masukkan password baru untuk akun Anda
+            </p>
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        <!-- FORM -->
+        <form method="POST" action="{{ route('password.store') }}">
+            @csrf
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <!-- Token -->
+            <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+            <!-- Email -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value="{{ old('email', request()->email) }}"
+                    required
+                    autofocus
+                    class="w-full rounded-lg border-gray-300 focus:border-red-500 focus:ring-red-500"
+                >
+                @error('email')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+            <!-- Password -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Password Baru
+                </label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+                    class="w-full rounded-lg border-gray-300 focus:border-red-500 focus:ring-red-500"
+                >
+                @error('password')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <!-- Confirm Password -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Konfirmasi Password
+                </label>
+                <input
+                    type="password"
+                    name="password_confirmation"
+                    placeholder="Konfirmasi Password"
+                    required
+                    class="w-full rounded-lg border-gray-300 focus:border-red-500 focus:ring-red-500"
+                >
+                @error('password_confirmation')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Button -->
+            <button
+                type="submit"
+                class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-lg transition"
+            >
+                Reset Password
+            </button>
+        </form>
+    </div>
+</div>
+@endsection

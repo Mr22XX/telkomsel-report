@@ -3,6 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+        <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#dc2626">
+
     <link rel="icon" href="{{ asset('icon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('icon.png') }}">
     <script src="https://kit.fontawesome.com/7f4731297f.js" crossorigin="anonymous"></script>
