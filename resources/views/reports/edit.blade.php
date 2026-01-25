@@ -66,32 +66,42 @@
             </h3>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                @php
-                    $fields = [
-                        'perdana' => 'Perdana',
-                        'byu' => 'ByU',
-                        'lite' => 'Lite',
-                        'orbit' => 'Orbit',
-                        'cvm_byu' => 'CVM ByU',
-                        'super_seru' => 'Super Seru',
-                        'digital' => 'Digital',
-                        'roaming' => 'Roaming',
-                        'my_telkomsel' => 'MyTelkomsel',
-                    ];
+               @php
+                $qtyFields = ['perdana','byu','lite','orbit'];
+
+                $revenueFields = [
+                    'cvm_byu' => 'CVM ByU',
+                    'super_seru' => 'Super Seru',
+                    'digital' => 'Digital',
+                    'roaming' => 'Roaming',
+                    'vf_hp' => 'VF HP',
+                    'vf_lite_byu' => 'VF Lite ByU',
+                    'lite_vf' => 'Lite VF',
+                    'byu_vf' => 'ByU VF',
+                    'my_telkomsel' => 'MyTelkomsel',
+                ];
                 @endphp
 
-                @foreach ($fields as $key => $label)
-                    <div>
-                        <label class="block text-xs text-gray-600 mb-1">
-                            {{ $label }}
-                        </label>
-                        <input type="number"
-                               min="0"
-                               name="{{ $key }}"
-                               value="{{ old($key, $report->$key) }}"
-                               class="w-full border p-1 rounded-lg border-gray-300 focus:ring-red-500 focus:border-red-500">
-                    </div>
+
+                @foreach($qtyFields as $f)
+                <div>
+                    <label for="" class="block text-xs text-gray-600 mb-1">{{$f}}</label>
+                    <input type="number" name="{{ $f }}"
+                    value="{{ old($f,$report->$f) }}" class="border p-1 rounded-lg">
+                </div>
                 @endforeach
+
+                @foreach($revenueFields as $key=>$label)
+                <div>
+                    <label for="" class="block text-xs text-gray-600 mb-1">{{$label}}</label>
+                    <input type="text"
+                    name="{{ $key }}"
+                    value="Rp {{ number_format(old($key,$report->$key),0,',','.') }}"
+                    class="rupiah p-1 border rounded-lg">
+                </div>
+                @endforeach
+
+
             </div>
         </div>
 
@@ -113,3 +123,30 @@
 </div>
 
 @endsection
+
+
+@push('scripts')
+<script>
+document.querySelectorAll('.rupiah').forEach(function(input) {
+    input.addEventListener('keyup', function(e) {
+        this.value = formatRupiah(this.value);
+    });
+});
+
+function formatRupiah(angka) {
+    let number_string = angka.replace(/[^,\d]/g, '').toString();
+    let split = number_string.split(',');
+    let sisa = split[0].length % 3;
+    let rupiah = split[0].substr(0, sisa);
+    let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        let separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+
+    rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+    return 'Rp ' + rupiah;
+}
+</script>
+@endpush

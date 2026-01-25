@@ -15,27 +15,15 @@ class SalesDashboardController extends Controller
     $today = Carbon::today();
 
     $todayReport = Report::where('user_id', $userId)
-        // ->whereDate('tanggal', $today)
-        ->first();
+        ->whereDate('tanggal', $today);
+        // ->first();
 
-    $todayQty = $todayReport
-    ? ($todayReport->perdana
-     + $todayReport->byu
-     + $todayReport->lite
-     + $todayReport->orbit)
-    : 0;
+    $totalQty = $todayReport->sum(DB::raw('perdana + byu + lite + orbit'));
 
-    $todayRevenue = $todayReport
-    ? ($todayReport->cvm_byu
-     + $todayReport->super_seru
-     + $todayReport->digital
-     + $todayReport->roaming
-     + $todayReport->vf_hp
-     + $todayReport->vf_lite_byu
-     + $todayReport->lite_vf
-     + $todayReport->byu_vf
-     + $todayReport->my_telkomsel)
-    : 0;
+    $totalRevenue = $todayReport->sum(DB::raw('
+        cvm_byu + super_seru + digital + roaming +
+        vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel
+    '));
 
 
         $year = now()->year;
@@ -43,11 +31,11 @@ class SalesDashboardController extends Controller
         $monthlyData = DB::table('reports')
             ->selectRaw('
                 MONTH(tanggal) as month,
+                SUM(perdana + byu + lite + orbit) as total_qty,
                 SUM(
-                    perdana + byu + lite + orbit + cvm_byu + super_seru +
-                    digital + roaming + vf_hp + vf_lite_byu +
-                    lite_vf + byu_vf + my_telkomsel
-                ) as total 
+                    cvm_byu + super_seru + digital + roaming +
+                    vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel
+                ) as total_revenue
             ')
             ->whereYear('tanggal', $year)
             ->where('user_id', $userId)
@@ -55,45 +43,62 @@ class SalesDashboardController extends Controller
             ->orderBy('month')
             ->get();
 
+
         // FIX biar Januari–Desember selalu ada
         $monthlyLabels = [];
-        $monthlyTotals = [];
+        $monthlyQtyTotals = [];
+        $monthlyRevenueTotals = [];
 
         for ($m = 1; $m <= 12; $m++) {
             $monthlyLabels[] = Carbon::create()->month($m)->format('M');
+
             $found = $monthlyData->firstWhere('month', $m);
-            $monthlyTotals[] = $found ? $found->total : 0;
+
+            $monthlyQtyTotals[] = $found ? $found->total_qty : 0;
+            $monthlyRevenueTotals[] = $found ? $found->total_revenue : 0;
         }
+
+
+        $chartQty = [
+            'perdana' => $todayReport->sum('perdana'),
+            'byu' => $todayReport->sum('byu'),
+            'lite' => $todayReport->sum('lite'),
+            'orbit' => $todayReport->sum('orbit'),
+        ];
+
+
+        $chartRevenue = [
+            'cvm_byu' => $todayReport->sum('cvm_byu'),
+            'super_seru' => $todayReport->sum('super_seru'),
+            'digital' => $todayReport->sum('digital'),
+            'roaming' => $todayReport->sum('roaming'),
+            'vf_hp' => $todayReport->sum('vf_hp'),
+            'vf_lite_byu' => $todayReport->sum('vf_lite_byu'),
+            'lite_vf' => $todayReport->sum('lite_vf'),
+            'byu_vf' => $todayReport->sum('byu_vf'),
+            'my_telkomsel' => $todayReport->sum('my_telkomsel'),
+        ];
+
+
+        $totalReport = Report::where('user_id', $userId)
+        ->whereDate('tanggal', $today)
+        ->count();
+
 
 
 
     return view('sales.dashboard', [
-        'totalReport' => Report::where('user_id', $userId)->count(),
-        'totalSellingToday' => $todayReport
-            ? $todayReport -> totalSelling()
-            : 0,
-        'monthlyLabels' => $monthlyLabels,
-        'monthlyTotals'=> $monthlyTotals,
-        'totalQty' => $todayReport ? $todayReport->totalQty() : 0,
-        'totalRevenue' => $todayReport ? $todayReport->totalRevenue() : 0,
+    'totalReport' => $totalReport,
+    'totalSellingToday' => $totalQty, 
+    'monthlyLabels' => $monthlyLabels,
+    'totalQty' => $totalQty,
+    'totalRevenue' => $totalRevenue,
+    'chartQty' => $chartQty,
+    'chartRevenue' => $chartRevenue,
+    'monthlyQtyTotals' => $monthlyQtyTotals,
+    'monthlyRevenueTotals' => $monthlyRevenueTotals,
+]);
 
 
-        // DATA CHART
-        'chartData' => [
-            'perdana' => $todayReport->perdana ?? 0,
-            'byu' => $todayReport->byu ?? 0,
-            'lite' => $todayReport->lite ?? 0,
-            'orbit' => $todayReport->orbit ?? 0,
-            'cvm_byu' => $todayReport->cvm_byu ?? 0,
-            'super_seru' => $todayReport->super_seru ?? 0,
-            'digital' => $todayReport->digital ?? 0,
-            'roaming' => $todayReport->roaming ?? 0,
-            'vf_hp' => $todayReport->vf_hp ?? 0,
-            'vf_lite_byu' => $todayReport->vf_lite_byu ?? 0,
-            'lite_vf' => $todayReport->lite_vf ?? 0,
-            'byu_vf' => $todayReport->byu_vf ?? 0,
-            'my_telkomsel' => $todayReport->my_telkomsel ?? 0,
-        ]
-    ]);
 }
 }

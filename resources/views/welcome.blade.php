@@ -5,7 +5,7 @@
     <div class="flex flex-col justify-center px-10 lg:px-20 text-white">
          <div class="absolute flex gap-1 items-center top-1 left-3">
             <img class=" bg-white rounded-full" src="/icon.png" width="40" height="40" alt="" >
-            <h1 class="text-2xl font-bold text-slate-950">TSR</h1>
+            <h1 class="text-2xl font-bold text-white">TSR</h1>
         </div>
         <h1 class="text-4xl lg:text-5xl font-bold leading-tight pt-7">
             Telkomsel<br>

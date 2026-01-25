@@ -5,6 +5,8 @@
 
 @section('content')
 
+
+
 <div class="max-w-6xl mx-auto">
     
     <form action="{{ route('reports.store') }}" method="POST"
@@ -56,28 +58,36 @@
                 Data Penjualan
             </h3>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
                 @php
-                $fields = [
-                    'perdana','byu','lite','orbit','cvm_byu','super_seru',
-                    'digital','roaming','vf_hp','vf_lite_byu',
-                    'lite_vf','byu_vf','my_telkomsel'
-                ];
-                @endphp
+                    $qtyFields = ['perdana','byu','lite','orbit'];
 
-                @foreach ($fields as $field)
-                <div>
-                    <label class="text-xs text-gray-600 uppercase">
-                        {{ str_replace('_', ' ', $field) }}
-                    </label>
-                    <input type="number" name="{{ $field }}"
-                           value="0" min="0"
-                           class="w-full mt-1 rounded-lg border p-1 border-gray-300 focus:ring-red-500 focus:border-red-500">
-                </div>
+                    $revenueFields = [
+                        'cvm_byu','super_seru','digital','roaming','vf_hp',
+                        'vf_lite_byu','lite_vf','byu_vf','my_telkomsel'
+                    ];
+                    @endphp
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach ($qtyFields as $field)
+                    <div>
+                        <label class="text-xs text-gray-600 uppercase">{{ str_replace('_',' ',$field) }}</label>
+                        <input type="number" name="{{ $field }}" value="0" min="0"
+                            class="w-full mt-1 rounded-lg border p-1 border-gray-300">
+                    </div>
                 @endforeach
+                </div>
 
-            </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach ($revenueFields as $field)
+                    <div>
+                        <label class="text-xs text-gray-600 uppercase">{{ str_replace('_',' ',$field) }}</label>
+                        <input type="text" name="{{ $field }}" value="0"
+                            class="rupiah w-full mt-1 rounded-lg border p-1 border-gray-300">
+                    </div>
+                @endforeach
+                </div>
+
         </div>
 
         <!-- ACTION -->
@@ -98,3 +108,37 @@
 </div>
 
 @endsection
+
+@push('scripts')
+
+<script>
+
+
+document.querySelectorAll('.rupiah').forEach(input => {
+    input.addEventListener('input', function(e) {
+        let value = this.value.replace(/[^0-9]/g, '');
+        this.value = formatRupiah(value);
+    });
+
+    input.addEventListener('blur', function() {
+        if (this.value === '') this.value = 'Rp 0';
+    });
+});
+
+function formatRupiah(angka) {
+    let numberString = angka.toString();
+    let sisa = numberString.length % 3;
+    let rupiah = numberString.substr(0, sisa);
+    let ribuan = numberString.substr(sisa).match(/\d{3}/g);
+
+    if (ribuan) {
+        let separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+
+    return rupiah ? 'Rp ' + rupiah : '';
+}
+
+</script>
+@endpush
+

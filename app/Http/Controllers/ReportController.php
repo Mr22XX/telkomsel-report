@@ -45,47 +45,64 @@ class ReportController extends Controller
             'lite' => 'nullable|integer|min:0',
             'orbit' => 'nullable|integer|min:0',
 
-            'cvm_byu' => 'nullable|numeric|min:0',
-            'super_seru' => 'nullable|numeric|min:0',
-            'digital' => 'nullable|numeric|min:0',
-            'roaming' => 'nullable|numeric|min:0',
-            'vf_hp' => 'nullable|numeric|min:0',
-            'vf_lite_byu' => 'nullable|numeric|min:0',
-            'lite_vf' => 'nullable|numeric|min:0',
-            'byu_vf' => 'nullable|numeric|min:0',
-            'my_telkomsel' => 'nullable|numeric|min:0',
+            // revenue tetap numeric setelah dibersihkan
+            'cvm_byu' => 'nullable',
+            'super_seru' => 'nullable',
+            'digital' => 'nullable',
+            'roaming' => 'nullable',
+            'vf_hp' => 'nullable',
+            'vf_lite_byu' => 'nullable',
+            'lite_vf' => 'nullable',
+            'byu_vf' => 'nullable',
+            'my_telkomsel' => 'nullable',
         ]);
+
+        // FIELD REVENUE
+        $revenueFields = [
+            'cvm_byu','super_seru','digital','roaming','vf_hp',
+            'vf_lite_byu','lite_vf','byu_vf','my_telkomsel'
+        ];
+
+        $data = $request->all();
+
+        // bersihkan Rp dan titik
+        foreach ($revenueFields as $field) {
+            $data[$field] = isset($data[$field])
+                ? preg_replace('/[^0-9]/', '', $data[$field])
+                : 0;
+        }
 
         Report::create([
             'user_id' => Auth::id(),
-            'tanggal' => $request->tanggal,
-            'tap' => $request->tap,
+            'tanggal' => $data['tanggal'],
+            'tap' => $data['tap'],
             'nama_sales' => Auth::user()->name,
 
-            'fokus_1' => $request->fokus_1,
-            'fokus_2' => $request->fokus_2,
-            'fokus_3' => $request->fokus_3,
+            'fokus_1' => $data['fokus_1'] ?? null,
+            'fokus_2' => $data['fokus_2'] ?? null,
+            'fokus_3' => $data['fokus_3'] ?? null,
 
-            'perdana' => $request->perdana ?? 0,
-            'byu' => $request->byu ?? 0,
-            'lite' => $request->lite ?? 0,
-            'orbit' => $request->orbit ?? 0,
-            'cvm_byu' => $request->cvm_byu ?? 0,
-            'super_seru' => $request->super_seru ?? 0,
-            'digital' => $request->digital ?? 0,
-            'roaming' => $request->roaming ?? 0,
+            'perdana' => $data['perdana'] ?? 0,
+            'byu' => $data['byu'] ?? 0,
+            'lite' => $data['lite'] ?? 0,
+            'orbit' => $data['orbit'] ?? 0,
 
-            'vf_hp' => $request->vf_hp ?? 0,
-            'vf_lite_byu' => $request->vf_lite_byu ?? 0,
-            'lite_vf' => $request->lite_vf ?? 0,
-            'byu_vf' => $request->byu_vf ?? 0,
-
-            'my_telkomsel' => $request->my_telkomsel ?? 0,
+            'cvm_byu' => $data['cvm_byu'] ?? 0,
+            'super_seru' => $data['super_seru'] ?? 0,
+            'digital' => $data['digital'] ?? 0,
+            'roaming' => $data['roaming'] ?? 0,
+            'vf_hp' => $data['vf_hp'] ?? 0,
+            'vf_lite_byu' => $data['vf_lite_byu'] ?? 0,
+            'lite_vf' => $data['lite_vf'] ?? 0,
+            'byu_vf' => $data['byu_vf'] ?? 0,
+            'my_telkomsel' => $data['my_telkomsel'] ?? 0,
         ]);
 
         return redirect()->route('reports.index')
             ->with('success', 'Report berhasil disimpan');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -112,11 +129,25 @@ class ReportController extends Controller
     {
         $this->authorizeOwner($report);
 
-        $report->update($request->all());
+        $revenueFields = [
+            'cvm_byu','super_seru','digital','roaming','vf_hp',
+            'vf_lite_byu','lite_vf','byu_vf','my_telkomsel'
+        ];
+
+        $data = $request->all();
+
+        foreach ($revenueFields as $field) {
+            if (isset($data[$field])) {
+                $data[$field] = preg_replace('/[^0-9]/', '', $data[$field]);
+            }
+        }
+
+        $report->update($data);
 
         return redirect()->route('reports.index')
             ->with('success', 'Report berhasil diupdate');
     }
+
 
     /**
      * Remove the specified resource from storage.

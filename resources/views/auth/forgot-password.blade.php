@@ -3,7 +3,10 @@
 @section('content')
 
 <div class="min-h-screen flex items-center justify-center px-4 relative flex-col">
-    <img class="absolute top-2 left-3" src="/icon.png" width="50" height="50" alt="">
+      <div class="absolute flex gap-1 items-center top-2 left-3">
+        <img class=" bg-white rounded-full" src="/icon.png" width="40" height="40" alt="" >
+        <h1 class="text-2xl font-bold text-white">TSR</h1>
+    </div>
 
     <form method="POST" action="{{ route('password.email') }}">
         @csrf

@@ -217,7 +217,7 @@ table.dataTable tbody td {
             <h2 class="text-lg font-semibold text-gray-700">
                 Detail Quantity
             </h2>
-            <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600">
+            <button onclick="closeDetailModal1()" class="text-gray-400 hover:text-gray-600">
                 ✕
             </button>
         </div>
