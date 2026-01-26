@@ -58,6 +58,12 @@ public function isSales()
     return $this->role === 'sales';
 }
 
+public function reports()
+{
+    return $this->hasMany(Report::class);
+}
+
+
 use Notifiable;
 
     public function sendPasswordResetNotification($token)

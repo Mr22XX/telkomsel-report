@@ -51,6 +51,18 @@ table.dataTable tbody td {
 
 <div class="mb-6 space-y-4">
 
+    @if(session('success'))
+    <script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session("success") }}',
+        timer: 2000,
+        showConfirmButton: true
+    });
+    </script>
+    @endif
+
     <h1 class="text-xl font-bold text-gray-800">
         Report Penjualan
     </h1>
@@ -137,11 +149,10 @@ table.dataTable tbody td {
                         </ol>
                     </td>
                     <td class="font-semibold"
-                        data-export="
-                        Perdana: {{ $r->perdana }}
-                        Byu: {{ $r->byu }}
-                        Lite: {{ $r->lite }}
-                        Orbit: {{ $r->orbit }}">
+                        data-perdana="{{ $r->perdana }}"
+                        data-byu="{{ $r->byu }}"
+                        data-lite="{{ $r->lite }}"
+                        data-orbit="{{ $r->orbit }}">
                         <button
                             class="underline text-red-600"
                             onclick="openDetailModal1({
@@ -155,17 +166,15 @@ table.dataTable tbody td {
                         </button>
                     </td>
                     <td class="font-semibold"
-                    data-export="
-                    CVM ByU: Rp {{ number_format($r->cvm_byu,0,',','.') }}
-                    Super Seru: Rp {{ number_format($r->super_seru,0,',','.') }}
-                    Digital: Rp {{ number_format($r->digital,0,',','.') }}
-                    Roaming: Rp {{ number_format($r->roaming,0,',','.') }}
-                    VF HP: Rp {{ number_format($r->vf_hp,0,',','.') }}
-                    VF Lite ByU: Rp {{ number_format($r->vf_lite_byu,0,',','.') }}
-                    Lite VF: Rp {{ number_format($r->lite_vf,0,',','.') }}
-                    ByU VF: Rp {{ number_format($r->byu_vf,0,',','.') }}
-                    MyTelkomsel: Rp {{ number_format($r->my_telkomsel,0,',','.') }}
-                    ">
+                    data-cvm="{{ $r->cvm_byu }}"
+                    data-super="{{ $r->super_seru }}"
+                    data-digital="{{ $r->digital }}"
+                    data-roaming="{{ $r->roaming }}"
+                    data-vfhp="{{ $r->vf_hp }}"
+                    data-vflite="{{ $r->vf_lite_byu }}"
+                    data-litevf="{{ $r->lite_vf }}"
+                    data-byuvf="{{ $r->byu_vf }}"
+                    data-mytel="{{ $r->my_telkomsel }}">
                         <button
                             class="underline text-red-600"
                             onclick="openDetailModal2({
@@ -184,18 +193,18 @@ table.dataTable tbody td {
                     </td>
                     <td class="space-x-3 whitespace-nowrap">
                         <a href="{{ route('reports.edit', $r->id) }}"
-                        class="text-blue-600 hover:underline">
-                        Edit
+                        class="text-blue-600 hover:text-blue-800">
+                        <i class="fa-regular fa-pen-to-square"></i>
                         </a>
 
                         <form action="{{ route('reports.destroy', $r->id) }}"
                             method="POST"
-                            class="inline"
-                            onsubmit="return confirm('Yakin hapus data ini?')">
+                            class="inline delete-form"
+                            >
                             @csrf
                             @method('DELETE')
-                            <button class="text-red-600 hover:underline">
-                                Hapus
+                            <button class="text-red-600 hover:text-red-800">
+                                <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
                     </td>
@@ -347,55 +356,119 @@ $(document).ready(function () {
         scrollX: false,
         dom: 'Bfrtip',
         buttons: [
-            {
-                extend: 'excelHtml5',
-                title: 'Report Penjualan',
-                exportOptions: {
-                    columns: [0,1,2,3,4],
-                    format: {
-                        body: function (data, row, column, node) {
-                            if (column === 3 || column === 4) {
-                                return $(node).attr('data-export') ?? data;
-                            }
-                            return data;
-                        }
-                    }
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                title: 'Report Penjualan',
-                orientation: 'landscape',
-                pageSize: 'A4',
-                exportOptions: {
-                    columns: [0,1,2,3,4],
-                    format: {
-                        body: function (data, row, column, node) {
-                            if (column === 3 || column === 4) {
-                                return $(node).attr('data-export') ?? data;
-                            }
-                            return data;
-                        }
-                    }
-                }
-            },
-            {
-                extend: 'print',
-                title: 'Report Penjualan',
-                exportOptions: {
-                    columns: [0,1,2,3,4],
-                    format: {
-                        body: function (data, row, column, node) {
-                            if (column === 3 || column === 4) {
-                                return $(node).attr('data-export') ?? data;
-                            }
-                            return data;
-                        }
-                    }
-                }
-            }
-        ],
+{
+    extend: 'excelHtml5',
+    title: 'Laporan Penjualan',
+    customizeData: function (data) {
 
+        // HEADER BARU
+        data.header = [
+            "Tanggal","TAP","Fokus",
+            "Perdana","Byu","Lite","Orbit",
+            "CVM ByU","Super Seru","Digital","Roaming",
+            "VF HP","VF Lite ByU","Lite VF","ByU VF","MyTelkomsel"
+        ];
+
+        let newBody = [];
+
+        data.body.forEach(function(row){
+
+            let qtyCell = row[3];
+            let totalCell = row[4];
+
+            let nodeQty   = $(table.cell({row: data.body.indexOf(row), column: 3}).node());
+            let nodeTotal = $(table.cell({row: data.body.indexOf(row), column: 4}).node());
+
+            newBody.push([
+                row[0], // tanggal
+                row[1], // tap
+                row[2], // fokus
+
+                nodeQty.data('perdana'),
+                nodeQty.data('byu'),
+                nodeQty.data('lite'),
+                nodeQty.data('orbit'),
+
+                nodeTotal.data('cvm'),
+                nodeTotal.data('super'),
+                nodeTotal.data('digital'),
+                nodeTotal.data('roaming'),
+                nodeTotal.data('vfhp'),
+                nodeTotal.data('vflite'),
+                nodeTotal.data('litevf'),
+                nodeTotal.data('byuvf'),
+                nodeTotal.data('mytel'),
+            ]);
+        });
+
+                data.body = newBody;
+            }
+        },
+        {
+    extend: 'pdfHtml5',
+    title: 'Laporan Penjualan',
+    orientation: 'landscape',
+    pageSize: 'A4',
+    customize: function (doc) {
+
+        let newHeader = [
+            "Tanggal","TAP","Fokus",
+            "Perdana","Byu","Lite","Orbit",
+            "CVM ByU","Super Seru","Digital","Roaming",
+            "VF HP","VF Lite ByU","Lite VF","ByU VF","MyTelkomsel"
+        ];
+
+        let body = doc.content[1].table.body;
+        let newBody = [];
+
+        // header baru
+        newBody.push(newHeader);
+
+        for (let i = 1; i < body.length; i++) {
+
+            let nodeQty   = $(table.cell({row: i-1, column: 3}).node());
+            let nodeTotal = $(table.cell({row: i-1, column: 4}).node());
+
+            newBody.push([
+                body[i][0].text || '',
+                body[i][1].text || '',
+                body[i][2].text || '',
+
+                nodeQty.data('perdana') || '0',
+                nodeQty.data('byu') || '0',
+                nodeQty.data('lite') || '0',
+                nodeQty.data('orbit') || '0',
+
+                nodeTotal.data('cvm') || '0',
+                nodeTotal.data('super') || '0',
+                nodeTotal.data('digital') || '0',
+                nodeTotal.data('roaming') || '0',
+                nodeTotal.data('vfhp') || '0',
+                nodeTotal.data('vflite') || '0',
+                nodeTotal.data('litevf') || '0',
+                nodeTotal.data('byuvf') || '0',
+                nodeTotal.data('mytel') || '0'
+            ]);
+        }
+
+        doc.content[1].table.body = newBody;
+
+        // font kecil agar muat
+        doc.defaultStyle.fontSize = 7;
+
+        // semua kolom auto width
+        doc.content[1].table.widths = Array(newHeader.length).fill('*');
+
+        // center title
+        doc.styles.title = {
+            alignment: 'center',
+            fontSize: 12,
+            bold: true
+        };
+    }
+}
+
+        ],
         language: {
             search: "Cari:",
             lengthMenu: "Tampilkan _MENU_ data",
@@ -477,6 +550,30 @@ function closeDetailModal2() {
     modal.classList.remove('flex');
 }
 </script>
+
+<script>
+document.querySelectorAll('.delete-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Yakin hapus data?',
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});
+</script>
+
 
 
 @endpush
