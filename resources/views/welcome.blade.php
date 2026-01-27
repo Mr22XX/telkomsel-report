@@ -36,10 +36,10 @@
                     Login
                 </a>
 
-                <a href="{{ route('register') }}"
+                {{-- <a href="{{ route('register') }}"
                    class="block w-full text-center border border-red-600 text-red-600 py-3 rounded-lg font-semibold hover:bg-red-50 transition">
                     Register
-                </a>
+                </a> --}}
             </div>
 
         </div>

@@ -76,12 +76,12 @@
                     <i class="fa-solid fa-table"></i>
                     Rekap Laporan
                 </a>
-{{-- 
-                <a href="{{ route('manager.sales') }}"
+
+                <a href="{{ route('manager.users') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-indigo-800">
                     <i class="fa-solid fa-users"></i>
                     Data Sales
-                </a> --}}
+                </a>
 
                 {{-- <a href="{{ route('manager.export') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-indigo-800">

@@ -2,10 +2,12 @@
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center px-4 relative">
-    <div class="absolute flex gap-1 items-center top-2 left-3">
-        <img class=" bg-white rounded-full" src="/icon.png" width="40" height="40" alt="" >
-        <h1 class="text-2xl font-bold text-white">TSR</h1>
-    </div>
+    <a href="/">
+        <div class="absolute flex gap-1 items-center top-2 left-3">
+            <img class=" bg-white rounded-full" src="/icon.png" width="40" height="40" alt="" >
+            <h1 class="text-2xl font-bold text-white">TSR</h1>
+        </div>
+    </a>
 
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
 
@@ -17,7 +19,7 @@
             @csrf
 
             <div>
-                <label class="text-sm text-gray-600">Email</label>
+                <label class="text-sm text-gray-700 font-medium" for="email">Email</label>
                 <input type="email" name="email" required placeholder="Example@gmail.com"
                        class="w-full mt-1 border rounded-lg px-4 py-2 focus:ring-red-500 focus:border-red-500">
             </div>
@@ -30,7 +32,7 @@
 
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="password">
                 Password
             </label>
 
@@ -47,7 +49,7 @@
                 </button>
             </div>
             <p class="mt-3">
-                <a href="{{ route('password.request') }}" class="text-black text-sm ">
+                <a href="{{ route('password.request') }}" class="text-slate-800 text-sm underline hover:text-slate-900">
                     Lupa Password ?
                     </a>
             </p>
@@ -63,12 +65,12 @@
             </button>
         </form>
 
-        <p class="text-sm text-center mt-6 text-gray-600">
+        {{-- <p class="text-sm text-center mt-6 text-gray-600">
             Belum punya akun?
             <a href="{{ route('register') }}" class="text-red-600 font-semibold">
                 Register
             </a>
-        </p>
+        </p> --}}
     </div>
 </div>
 @endsection

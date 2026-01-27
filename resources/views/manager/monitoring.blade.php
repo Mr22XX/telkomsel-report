@@ -62,8 +62,8 @@ table.dataTable tbody td {
     <th>Nama Sales</th>
     <th>Tanggal</th>
     <th>Status Laporan</th>
-    <th>Total Qty</th>
-    <th>Total Revenue</th>
+    <th>Total (Qty)</th>
+    <th>Total (Rupiah)</th>
 </tr>
 </thead>
 <tbody>
@@ -130,10 +130,6 @@ $(document).ready(function() {
                 title: 'Monitoring Sales {{ now()->format("Y-m-d") }}',
                 orientation: 'landscape',
                 pageSize: 'A4'
-            },
-            {
-                extend: 'print',
-                title: 'Monitoring Sales {{ now()->format("Y-m-d") }}'
             }
         ],
         pageLength: 10,

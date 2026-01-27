@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ManagerUserController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ManagerDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +15,12 @@ Route::middleware(['auth','role:manager'])->group(function () {
     Route::get('/manager/monitoring', [ManagerDashboardController::class,'monitoring'])->name('manager.monitoring');
     Route::get('/manager/rekap', [ManagerDashboardController::class,'rekap'])->name('manager.rekap');
     // Route::get('/manager/export', [ManagerDashboardController::class,'export'])->name('manager.export');
-    // Route::get('/manager/sales', [ManagerDashboardController::class,'sales'])->name('manager.sales');
+    Route::get('/manager/sales', [ManagerUserController::class,'index'])->name('manager.users');
+    Route::get('/manager/sales/create', [ManagerUserController::class,'create'])->name('manager.users.create');
+    Route::post('/manager/sales', [ManagerUserController::class,'store'])->name('manager.users.store');
+    Route::get('/manager/sales/{id}/edit', [ManagerUserController::class,'edit'])->name('manager.users.edit');
+    Route::put('/manager/sales/{id}', [ManagerUserController::class,'update'])->name('manager.users.update');
+    Route::delete('/manager/sales/{id}', [ManagerUserController::class,'destroy'])->name('manager.users.destroy');
 });
 
 
