@@ -14,12 +14,12 @@
 </div>
 
 <div class="bg-white rounded-2xl shadow p-6 border-l-4 border-red-500">
-<p>Total Qty</p>
+<p>Total (Qty) Hari Ini</p>
 <p class="text-3xl font-bold">{{ $totalQty }}</p>
 </div>
 
 <div class="bg-white rounded-2xl shadow p-6 border-l-4 border-green-500">
-<p>Total Revenue</p>
+<p>Total (Rupiah) Hari Ini</p>
 <p class="text-3xl font-bold text-green-600">
 Rp {{ number_format($totalRevenue,0,',','.') }}
 </p>

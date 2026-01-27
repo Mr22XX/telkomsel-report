@@ -5,6 +5,7 @@
     <title>@yield('title','Dashboard Manager')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -78,7 +79,7 @@
                 </a>
 
                 <a href="{{ route('manager.users') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-indigo-800">
+                   class="flex items-center gap-3 px-4 py-3 rounded-lg {{ request()->routeIs('manager.users') ? 'bg-white text-indigo-600 font-semibold' : 'hover:bg-blue-800' }}">
                     <i class="fa-solid fa-users"></i>
                     Data Sales
                 </a>
