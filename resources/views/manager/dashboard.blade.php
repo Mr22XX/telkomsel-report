@@ -59,7 +59,7 @@ Rp {{ number_format($totalRevenue,0,',','.') }}
 <tr class="border-b">
 <td class="p-2">{{ $i+1 }}</td>
 <td>{{ $r->name }}</td>
-<td>{{ $r->total_qty }}</td>
+<td>{{ $r->total_qty}}</td>
 <td>Rp {{ number_format($r->total_revenue,0,',','.') }}</td>
 </tr>
 @endforeach

@@ -573,7 +573,7 @@ document.querySelectorAll('.delete-form').forEach(form => {
     });
 });
 </script>
-
+  
 
 
 @endpush

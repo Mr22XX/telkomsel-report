@@ -78,7 +78,7 @@ table.dataTable tbody td {
     );
 
     $totalRevenue = $s->reports->sum(fn($r) =>
-        $r->cvm_byu +
+        $r->cvm_byu + 
         $r->super_seru +
         $r->digital +
         $r->roaming +
