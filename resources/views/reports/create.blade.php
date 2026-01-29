@@ -58,9 +58,8 @@
                 Data Penjualan
             </h3>
 
-
                 @php
-                    $qtyFields = ['perdana','byu','lite','orbit'];
+                    $qtyFields = ['perdana','byu','lite'];
 
                     $revenueFields = [
                         'cvm_byu','super_seru','digital','roaming','vf_hp',
@@ -77,6 +76,71 @@
                     </div>
                 @endforeach
                 </div>
+
+                <!-- ORBIT (ACCORDION MINI) -->
+                <div class="mt-2">
+                    <button type="button"
+                        onclick="toggleOrbit()"
+                        class="w-full flex justify-between items-center text-sm font-medium text-gray-700 border rounded-lg px-2 py-1 hover:bg-gray-50">
+
+                        <span>Orbit</span>
+
+                        <svg id="orbitIcon" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div id="orbitBody" class="hidden mt-2 border rounded-lg p-2 bg-gray-50">
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+                            <div>
+                                <label class="text-xs text-gray-600">SP Telkomsel Lite</label>
+                                <input type="number" name="sp_telkom" value="0" min="0"
+                                    class="w-full mt-1 rounded border p-1 border-gray-300">
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-gray-600">Orbit N1</label>
+                                <input type="number" name="orbit_n1" value="0" min="0"
+                                    class="w-full mt-1 rounded border p-1 border-gray-300">
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-gray-600">Orbit Star N2</label>
+                                <input type="number" name="orbit_n2" value="0" min="0"
+                                    class="w-full mt-1 rounded border p-1 border-gray-300">
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-gray-600">Orbit Star N2 (New)</label>
+                                <input type="number" name="orbit_n2_new" value="0" min="0"
+                                    class="w-full mt-1 rounded border p-1 border-gray-300">
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-gray-600">Orbit Star H2</label>
+                                <input type="number" name="orbit_h2" value="0" min="0"
+                                    class="w-full mt-1 rounded border p-1 border-gray-300">
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-gray-600">Orbit Star H2 (Np-01)</label>
+                                <input type="number" name="orbit_h2_np01" value="0" min="0"
+                                    class="w-full mt-1 rounded border p-1 border-gray-300">
+                            </div>
+
+                            <div>
+                                <label class="text-xs text-gray-600">Orbit Star H3</label>
+                                <input type="number" name="orbit_h3" value="0" min="0"
+                                    class="w-full mt-1 rounded border p-1 border-gray-300">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 @foreach ($revenueFields as $field)
@@ -140,5 +204,16 @@ function formatRupiah(angka) {
 }
 
 </script>
+
+<script>
+function toggleOrbit() {
+    const body = document.getElementById('orbitBody');
+    const icon = document.getElementById('orbitIcon');
+
+    body.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180');
+}
+</script>
+
 @endpush
 

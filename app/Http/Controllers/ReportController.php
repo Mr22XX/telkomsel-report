@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $reports = Report::where('user_id', Auth::id())
@@ -20,17 +17,11 @@ class ReportController extends Controller
         return view('reports.index', compact('reports'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('reports.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -43,9 +34,16 @@ class ReportController extends Controller
             'perdana' => 'nullable|integer|min:0',
             'byu' => 'nullable|integer|min:0',
             'lite' => 'nullable|integer|min:0',
-            'orbit' => 'nullable|integer|min:0',
 
-            // revenue tetap numeric setelah dibersihkan
+            // jumlah pcs orbit
+            'sp_telkom' => 'nullable|integer|min:0',
+            'orbit_n1' => 'nullable|integer|min:0',
+            'orbit_n2' => 'nullable|integer|min:0',
+            'orbit_n2_new' => 'nullable|integer|min:0',
+            'orbit_h2' => 'nullable|integer|min:0',
+            'orbit_h2_np01' => 'nullable|integer|min:0',
+            'orbit_h3' => 'nullable|integer|min:0',
+
             'cvm_byu' => 'nullable',
             'super_seru' => 'nullable',
             'digital' => 'nullable',
@@ -57,7 +55,6 @@ class ReportController extends Controller
             'my_telkomsel' => 'nullable',
         ]);
 
-        // FIELD REVENUE
         $revenueFields = [
             'cvm_byu','super_seru','digital','roaming','vf_hp',
             'vf_lite_byu','lite_vf','byu_vf','my_telkomsel'
@@ -65,12 +62,24 @@ class ReportController extends Controller
 
         $data = $request->all();
 
-        // bersihkan Rp dan titik
         foreach ($revenueFields as $field) {
             $data[$field] = isset($data[$field])
                 ? preg_replace('/[^0-9]/', '', $data[$field])
                 : 0;
         }
+
+        // ================= ORBIT CALCULATION =================
+        $prices = config('orbit_price.orbit');
+
+        $orbit_total =
+            ($data['sp_telkom'] ?? 0) * $prices['SP Telkomsel Lite'] +
+            ($data['orbit_n1'] ?? 0) * $prices['Orbit N1'] +
+            ($data['orbit_n2'] ?? 0) * $prices['Orbit Star N2'] +
+            ($data['orbit_n2_new'] ?? 0) * $prices['Orbit Star N2 (New-01)'] +
+            ($data['orbit_h2'] ?? 0) * $prices['Orbit Star H2'] +
+            ($data['orbit_h2_np01'] ?? 0) * $prices['Orbit Star H2 (Np-01)'] +
+            ($data['orbit_h3'] ?? 0) * $prices['Orbit Star H3'];
+        // =====================================================
 
         Report::create([
             'user_id' => Auth::id(),
@@ -85,7 +94,18 @@ class ReportController extends Controller
             'perdana' => $data['perdana'] ?? 0,
             'byu' => $data['byu'] ?? 0,
             'lite' => $data['lite'] ?? 0,
-            'orbit' => $data['orbit'] ?? 0,
+
+            // jumlah pcs orbit
+            'sp_telkom' => $data['sp_telkom'] ?? 0,
+            'orbit_n1' => $data['orbit_n1'] ?? 0,
+            'orbit_n2' => $data['orbit_n2'] ?? 0,
+            'orbit_n2_new' => $data['orbit_n2_new'] ?? 0,
+            'orbit_h2' => $data['orbit_h2'] ?? 0,
+            'orbit_h2_np01' => $data['orbit_h2_np01'] ?? 0,
+            'orbit_h3' => $data['orbit_h3'] ?? 0,
+
+            // hasil rupiah orbit
+            'orbit' => $orbit_total,
 
             'cvm_byu' => $data['cvm_byu'] ?? 0,
             'super_seru' => $data['super_seru'] ?? 0,
@@ -102,29 +122,18 @@ class ReportController extends Controller
             ->with('success', 'Report berhasil disimpan');
     }
 
-
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Report $report)
     {
         $this->authorizeOwner($report);
         return view('reports.show', compact('report'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Report $report)
     {
         $this->authorizeOwner($report);
         return view('reports.edit', compact('report'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Report $report)
     {
         $this->authorizeOwner($report);
@@ -142,16 +151,27 @@ class ReportController extends Controller
             }
         }
 
+        // ================= ORBIT CALCULATION =================
+        $prices = config('orbit_price.orbit');
+
+        $orbit_total =
+            ($data['sp_telkom'] ?? 0) * $prices['SP Telkomsel Lite'] +
+            ($data['orbit_n1'] ?? 0) * $prices['Orbit N1'] +
+            ($data['orbit_n2'] ?? 0) * $prices['Orbit Star N2'] +
+            ($data['orbit_n2_new'] ?? 0) * $prices['Orbit Star N2 (New-01)'] +
+            ($data['orbit_h2'] ?? 0) * $prices['Orbit Star H2'] +
+            ($data['orbit_h2_np01'] ?? 0) * $prices['Orbit Star H2 (Np-01)'] +
+            ($data['orbit_h3'] ?? 0) * $prices['Orbit Star H3'];
+
+        $data['orbit'] = $orbit_total;
+        // =====================================================
+
         $report->update($data);
 
         return redirect()->route('reports.index')
             ->with('success', 'Report berhasil diupdate');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Report $report)
     {
         $this->authorizeOwner($report);
@@ -161,9 +181,6 @@ class ReportController extends Controller
             ->with('success', 'Report berhasil dihapus');
     }
 
-    /**
-     * CEK KEPEMILIKAN DATA
-     */
     private function authorizeOwner(Report $report)
     {
         if ($report->user_id !== Auth::id()) {
