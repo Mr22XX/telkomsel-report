@@ -62,8 +62,7 @@ table.dataTable tbody td {
     <th>Nama Sales</th>
     <th>Tanggal</th>
     <th>Status Laporan</th>
-    <th>Total (Qty)</th>
-    <th>Total (Rupiah)</th>
+    <th>Total Penjualan (Hari Ini)</th>
 </tr>
 </thead>
 <tbody>
@@ -77,6 +76,7 @@ table.dataTable tbody td {
         $r->perdana + $r->byu + $r->lite + $r->orbit
     );
 
+
     $totalRevenue = $s->reports->sum(fn($r) =>
         $r->cvm_byu + 
         $r->super_seru +
@@ -86,7 +86,12 @@ table.dataTable tbody td {
         $r->vf_lite_byu +
         $r->lite_vf +
         $r->byu_vf +
-        $r->my_telkomsel
+        $r->my_telkomsel+
+        $r->orbit +
+        $r->perdana *35000 +
+        $r->lite * 35000 +
+        $r->byu * 35000
+
     );
 @endphp
 
@@ -101,7 +106,6 @@ table.dataTable tbody td {
             <span class="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">Belum Input</span>
         @endif
     </td>
-    <td>{{ $totalQty }}</td>
     <td>Rp {{ number_format($totalRevenue,0,',','.') }}</td>
 </tr>
 @endforeach

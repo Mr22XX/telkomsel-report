@@ -109,16 +109,23 @@ $totalRevenue =
                 <button
                     class="underline text-blue-600"
                     onclick="openDetailModal1({
-                    perdana: '{{ $r->perdana }}',
-                    byu: '{{ $r->byu }}',
-                    lite: '{{ $r->lite }}',
-                    orbit: '{{ $r->orbit }}',
+                        perdana: '{{ $r->perdana }}',
+                        byu: '{{ $r->byu }}',
+                        lite: '{{ $r->lite }}',
+
+                        sp_telkom: '{{ $r->sp_telkom }}',
+                        orbit_n1: '{{ $r->orbit_n1 }}',
+                        orbit_n2: '{{ $r->orbit_n2 }}',
+                        orbit_n2_new: '{{ $r->orbit_n2_new }}',
+                        orbit_h2: '{{ $r->orbit_h2 }}',
+                        orbit_h2_np01: '{{ $r->orbit_h2_np01 }}',
+                        orbit_h3: '{{ $r->orbit_h3 }}',
                     })">
 
-                    {{ $totalQty }}
-                </button>
+                    {{ $r->totalQty() }}
+                    </button>
         </td>
-    <td class="font-semibold"
+                <td class="font-semibold"
                     data-cvm="{{ $r->cvm_byu }}"
                     data-super="{{ $r->super_seru }}"
                     data-digital="{{ $r->digital }}"
@@ -179,10 +186,49 @@ $totalRevenue =
                 <span>Lite</span>
                 <span id="detailLite" class="font-semibold"></span>
             </li>
-            <li class="flex justify-between">
-                <span>Orbit</span>
-                <span id="detailOrbit" class="font-semibold"></span>
+
+            <!-- ORBIT ACCORDION -->
+            <li>
+                <button onclick="toggleOrbitDetail()"
+                    class="w-full flex justify-between items-center text-left font-semibold text-blue-600 underline">
+                    <span>Orbit (Total)</span>
+                    <span id="detailOrbitTotal"></span>
+                </button>
+
+                <div id="orbitDetailBody" class="hidden mt-2 pl-3 space-y-1 text-sm border-l">
+
+                    <div class="flex justify-between">
+                        <span>SP Telkomsel Lite</span>
+                        <span id="detailSpTelkom"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Orbit N1</span>
+                        <span id="detailOrbitN1"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Orbit Star N2</span>
+                        <span id="detailOrbitN2"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Orbit Star N2 (New)</span>
+                        <span id="detailOrbitN2New"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Orbit Star H2</span>
+                        <span id="detailOrbitH2"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Orbit Star H2 (Np-01)</span>
+                        <span id="detailOrbitH2Np01"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Orbit Star H3</span>
+                        <span id="detailOrbitH3"></span>
+                    </div>
+
+                </div>
             </li>
+
         </ul>
 
         <div class="mt-6 text-right">
@@ -312,9 +358,9 @@ $(document).ready(function () {
                         row[3], // TAP
                         row[4], // Fokus
 
-                        nodeQty.data('perdana'),
-                        nodeQty.data('byu'),
-                        nodeQty.data('lite'),
+                        nodeQty.data('perdana') *35000,
+                        nodeQty.data('byu')*35000,
+                        nodeQty.data('lite')*35000,
                         nodeQty.data('orbit'),
 
                         nodeTotal.data('cvm'),
@@ -426,23 +472,41 @@ $(document).ready(function () {
 
 <script>
 function openDetailModal1(data) {
+
     document.getElementById('detailPerdana').innerText = data.perdana;
     document.getElementById('detailByu').innerText = data.byu;
     document.getElementById('detailLite').innerText = data.lite;
-    document.getElementById('detailOrbit').innerText = data.orbit;
-    // document.getElementById('detailCvmByu').innerText = data.cvm_byu;
-    // document.getElementById('detailSuper').innerText = data.super_seru;
-    // document.getElementById('detailDigital').innerText = data.digital;
-    // document.getElementById('detailRoaming').innerText = data.roaming;
-    // document.getElementById('detailVfhp').innerText = data.vf_hp;
-    // document.getElementById('detailVflitebyu').innerText = data.vf_lite_byu;
-    // document.getElementById('detailLitevf').innerText = data.lite_vf;
-    // document.getElementById('detailByuvf').innerText = data.byu_vf;
-    // document.getElementById('detailMytelkomsel').innerText = data.mytelkomsel;
+
+    // total orbit pcs (belum dikali harga)
+    let orbitTotal =
+        parseInt(data.sp_telkom) +
+        parseInt(data.orbit_n1) +
+        parseInt(data.orbit_n2) +
+        parseInt(data.orbit_n2_new) +
+        parseInt(data.orbit_h2) +
+        parseInt(data.orbit_h2_np01) +
+        parseInt(data.orbit_h3);
+
+    document.getElementById('detailOrbitTotal').innerText = orbitTotal;
+
+    // detail orbit
+    document.getElementById('detailSpTelkom').innerText = data.sp_telkom;
+    document.getElementById('detailOrbitN1').innerText = data.orbit_n1;
+    document.getElementById('detailOrbitN2').innerText = data.orbit_n2;
+    document.getElementById('detailOrbitN2New').innerText = data.orbit_n2_new;
+    document.getElementById('detailOrbitH2').innerText = data.orbit_h2;
+    document.getElementById('detailOrbitH2Np01').innerText = data.orbit_h2_np01;
+    document.getElementById('detailOrbitH3').innerText = data.orbit_h3;
 
     const modal = document.getElementById('detailModal1');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+}
+
+
+function toggleOrbitDetail() {
+    const body = document.getElementById('orbitDetailBody');
+    body.classList.toggle('hidden');
 }
 
 function closeDetailModal1() {

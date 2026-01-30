@@ -18,13 +18,14 @@ class ManagerDashboardController extends Controller
         // Summary
         $totalReport = Report::whereDate('tanggal',$today)->count();
 
-        $totalQty = Report::whereDate('tanggal',$today)
-            ->sum(DB::raw('perdana + byu + lite + orbit'));
+        // $totalQty = Report::whereDate('tanggal',$today)
+        //     ->sum(DB::raw('perdana + byu + lite + orbit'));
 
         $totalRevenue = Report::whereDate('tanggal',$today)
             ->sum(DB::raw('
                 cvm_byu + super_seru + digital + roaming +
-                vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel
+                vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel + orbit + (perdana * 35000)
+                + (lite * 35000) + (byu * 35000)
             '));
 
         // Ranking sales
@@ -33,7 +34,8 @@ class ManagerDashboardController extends Controller
             DB::raw('SUM(perdana + byu + lite + orbit) as total_qty'),
             DB::raw('SUM(
                 cvm_byu + super_seru + digital + roaming +
-                vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel
+                vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel + orbit + (perdana * 35000)
+                + (lite * 35000) + (byu * 35000)
             ) as total_revenue')
         )
         ->join('users','reports.user_id','=','users.id')
@@ -52,7 +54,8 @@ class ManagerDashboardController extends Controller
                 SUM(perdana + byu + lite + orbit) as total_qty,
                 SUM(
                     cvm_byu + super_seru + digital + roaming +
-                    vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel
+                    vf_hp + vf_lite_byu + lite_vf + byu_vf + my_telkomsel + orbit + (perdana * 35000)
+                + (lite * 35000) + (byu * 35000)
                 ) as total_revenue
             ')
             ->whereYear('tanggal', $year)
@@ -75,7 +78,7 @@ class ManagerDashboardController extends Controller
 
         return view('manager.dashboard', compact(
             'totalReport',
-            'totalQty',
+            // 'totalQty',
             'totalRevenue',
             'ranking',
             'monthlyLabels',

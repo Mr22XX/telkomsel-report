@@ -256,7 +256,7 @@ table.dataTable tbody td {
             <!-- ORBIT ACCORDION -->
             <li>
                 <button onclick="toggleOrbitDetail()"
-                    class="w-full flex justify-between items-center text-left font-semibold text-red-600">
+                    class="w-full flex justify-between items-center text-left font-semibold text-red-600 underline">
                     <span>Orbit (Total)</span>
                     <span id="detailOrbitTotal"></span>
                 </button>
