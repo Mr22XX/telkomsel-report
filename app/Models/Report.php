@@ -18,6 +18,14 @@ class Report extends Model
         'fokus_2',
         'fokus_3',
         'perdana',
+        // orbit pcs
+        'sp_telkom',
+        'orbit_n1',
+        'orbit_n2',
+        'orbit_n2_new',
+        'orbit_h2',
+        'orbit_h2_np01',
+        'orbit_h3',
         'byu',
         'lite',
         'orbit',
@@ -62,10 +70,17 @@ class Report extends Model
     // =========================
     public function totalQty()
     {
-        return ($this->perdana ?? 0)
-             + ($this->byu ?? 0)
-             + ($this->lite ?? 0)
-             + ($this->orbit ?? 0);
+        return $this->perdana +
+        $this->byu +
+        $this->lite +
+
+        $this->sp_telkom +
+        $this->orbit_n1 +
+        $this->orbit_n2 +
+        $this->orbit_n2_new +
+        $this->orbit_h2 +
+        $this->orbit_h2_np01 +
+        $this->orbit_h3;
     }
 
     // =========================

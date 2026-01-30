@@ -67,7 +67,7 @@
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                @php
-                $qtyFields = ['perdana','byu','lite','orbit'];
+                $qtyFields = ['perdana','byu','lite'];
 
                 $revenueFields = [
                     'cvm_byu' => 'CVM ByU',
@@ -90,6 +90,69 @@
                     value="{{ old($f,$report->$f) }}" class="border p-1 rounded-lg">
                 </div>
                 @endforeach
+
+                <!-- ORBIT ACCORDION -->
+                <div class="col-span-2 md:col-span-4">
+                    <details class="border rounded-lg">
+                        <summary class="cursor-pointer p-2 font-semibold text-sm bg-gray-100 rounded-lg">
+                            Data Orbit
+                        </summary>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-3">
+
+                            <div>
+                                <label class="text-xs">SP Telkomsel Lite</label>
+                                <input type="number" name="sp_telkom"
+                                    value="{{ old('sp_telkom', $report->sp_telkom) }}"
+                                    min="0" class="border p-1 rounded-lg w-full">
+                            </div>
+
+                            <div>
+                                <label class="text-xs">Orbit N1</label>
+                                <input type="number" name="orbit_n1"
+                                    value="{{ old('orbit_n1', $report->orbit_n1) }}"
+                                    min="0" class="border p-1 rounded-lg w-full">
+                            </div>
+
+                            <div>
+                                <label class="text-xs">Orbit Star N2</label>
+                                <input type="number" name="orbit_n2"
+                                    value="{{ old('orbit_n2', $report->orbit_n2) }}"
+                                    min="0" class="border p-1 rounded-lg w-full">
+                            </div>
+
+                            <div>
+                                <label class="text-xs">Orbit Star N2 (New-01)</label>
+                                <input type="number" name="orbit_n2_new"
+                                    value="{{ old('orbit_n2_new', $report->orbit_n2_new) }}"
+                                    min="0" class="border p-1 rounded-lg w-full">
+                            </div>
+
+                            <div>
+                                <label class="text-xs">Orbit Star H2</label>
+                                <input type="number" name="orbit_h2"
+                                    value="{{ old('orbit_h2', $report->orbit_h2) }}"
+                                    min="0" class="border p-1 rounded-lg w-full">
+                            </div>
+
+                            <div>
+                                <label class="text-xs">Orbit Star H2 (NP-01)</label>
+                                <input type="number" name="orbit_h2_np01"
+                                    value="{{ old('orbit_h2_np01', $report->orbit_h2_np01) }}"
+                                    min="0" class="border p-1 rounded-lg w-full">
+                            </div>
+
+                            <div>
+                                <label class="text-xs">Orbit Star H3</label>
+                                <input type="number" name="orbit_h3"
+                                    value="{{ old('orbit_h3', $report->orbit_h3) }}"
+                                    min="0" class="border p-1 rounded-lg w-full">
+                            </div>
+
+                        </div>
+                    </details>
+                </div>
+
 
                 @foreach($revenueFields as $key=>$label)
                 <div>
